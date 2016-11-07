@@ -7,6 +7,7 @@
 
 // let Phaser;
 
+
 const game = new Phaser.Game(800, 600, Phaser.AUTO, '',{
   preload: preload,
   create: create,
@@ -35,9 +36,9 @@ function preload(){
 
 let cursors;
 let katie;
-let wills;
-// let table1;
-let chair;
+let score = 0;
+let scoreText;
+// let chair;
 
 
 function create() {
@@ -48,23 +49,18 @@ function create() {
   //	Enable p2 physics
 	game.physics.startSystem(Phaser.Physics.P2JS);
 
-// ----------------------------------------------------------
 // Turn on impact events for the world, without this we get no collision callbacks
   game.physics.p2.setImpactEvents(true);
-// ----------------------------------------------------------
 
   game.physics.p2.defaultRestitution = 0.8;
-
-
-// ----------------------------------------------------------
 
   // Collission Groups
   let playerCollisionGroup = game.physics.p2.createCollisionGroup();
   let studentCollisionGroup = game.physics.p2.createCollisionGroup();
-  let furnitureCollisionGroup = game.physics.p2.createCollisionGroup();   //// Trying tables collision
+  // let furnitureCollisionGroup = game.physics.p2.createCollisionGroup();   //// Trying tables collision
+
   // Objects with their own collision groups still collide with the world bounds:
   game.physics.p2.updateBoundsCollisionGroup();
-// -----------------------------------------------------------
 
   // random location
   let x = game.world.randomX;
@@ -74,21 +70,18 @@ function create() {
   katie = game.add.sprite (700, 230, 'sprites','katie.png');
   game.physics.p2.enable(katie);
   katie.body.setCircle(30);
-
   // katie.body.setZeroDamping();
 	katie.body.fixedRotation = true;
-  // -----------------------------------------------------------
   katie.smoothed = false;
 
   katie.body.setCollisionGroup(playerCollisionGroup);
-  katie.body.collides(studentCollisionGroup, hitStudent, hitChair);
+  katie.body.collides(studentCollisionGroup, hitStudent);
 
   game.camera.follow(katie);
   // -----------------------------------------------------------
-
   // students.body.velocity.setTo(-10, 0);
-
   // -----------------------------------------------------------
+
   let students = game.add.group();
   students.enableBody = true;
   students.physicsBodyType = Phaser.Physics.P2JS;
@@ -96,7 +89,7 @@ function create() {
   for (let i = 0; i < 23; i++)
   {
     let student = students.create(190 + 69 * i, -90, 'enemies', i);
-    // student.body.setRectangle(1,2,10,10);
+    student.body.setRectangle(30,30, 0, 0, 4);
     // student.body.setCircle(30);
 
     student.body.fixedRotation = true;
@@ -105,8 +98,6 @@ function create() {
 
     student.body.collides([ studentCollisionGroup, playerCollisionGroup ]);
   }
-  // -----------------------------------------------------------
-
 
   // ----------------------------------------------------------- Trying tables collision
 
@@ -244,13 +235,16 @@ function create() {
   // //door
   // door.body.static = true;
 
+
   cursors = game.input.keyboard.createCursorKeys();
+
+  scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
 }
 
-// -----------------------------------------------------------
 function hitStudent(body1, body2) {
   body2.sprite.alpha -= 0.5;
+  score += 10;
 }
 
 // Trying tables collision
@@ -261,6 +255,7 @@ function hitStudent(body1, body2) {
 // -----------------------------------------------------------
 
 function update() {
+
 
   katie.body.setZeroVelocity();
 
@@ -280,16 +275,10 @@ function update() {
     {
       katie.body.moveDown(350);
     }
-  // if (!game.camera.atLimit.x)
-  // {
-  //   ground.tilePosition.x += (katie.body.velocity.x * 16) * game.time.physicsElapsed;
-  // }
-  // if (!game.camera.atLimit.y)
-  // {
-  //   ground.tilePosition.y += (katie.body.velocity.y * 16) * game.time.physicsElapsed;
-  // }
 }
 
 function render() {
-  game.debug.text('Move the students out of the way!', 32, 32);
+  scoreText.text = 'Score: ' + score;
+  // game.debug.text('Move the students out of the way ' + scoreText.text, 32, 32);
+
 }
