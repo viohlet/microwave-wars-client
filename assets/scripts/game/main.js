@@ -88,9 +88,11 @@ function create() {
 
   for (let i = 0; i < 23; i++)
   {
-    let student = students.create(190 + 69 * i, -90, 'enemies', i);
+    // let student = students.create(190 + 69 * i, -90, 'enemies', i);
+    let student = students.create(x, y, 'enemies', i);
     student.body.setRectangle(30,30, 0, 0, 4);
     // student.body.setCircle(30);
+    // student.health = 2;
 
     student.body.fixedRotation = true;
 
@@ -238,14 +240,35 @@ function create() {
 
   cursors = game.input.keyboard.createCursorKeys();
 
-  scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+  scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
 }
 
-function hitStudent(body1, body2) {
-  body2.sprite.alpha -= 0.5;
+// function hitStudent(katie, student) {
+//   student.health = 2;
+//   student.sprite.alpha -= 0.5;
+//   // student.sprite.alpha -= 0.5;
+//   score += 10;
+//   // student.destroy();
+// }
+
+function hitStudent(katie, student) {
+  student.health = 2;
+  student.sprite.alpha -= 1;
+  // student.sprite.alpha -= 0.5;
   score += 10;
+  student.destroy();
 }
+
+// function destroyStudent(katie, student) {
+  // if {
+      // hitStudent()
+    // }
+  // return
+  // score += 10;
+  // student.destroy();
+// }
+
 
 // Trying tables collision
 // function hitChair(body1, body2) {
