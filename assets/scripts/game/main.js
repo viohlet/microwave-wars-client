@@ -10,7 +10,7 @@
 // *****************
 
 
-const game = new Phaser.Game(800, 600, Phaser.AUTO, '',{
+const game = new Phaser.Game(800, 600, Phaser.AUTO, 'show-game', {
   preload: preload,
   create: create,
   update: update,
@@ -41,6 +41,9 @@ let students;
 let cursors;
 let score = 0;
 let scoreText;
+let timerText;
+let weapon;
+let fireButton;
 
   function create() {
 
@@ -67,11 +70,22 @@ let scoreText;
     let x = game.world.randomX;
     let y = game.world.randomY;
 
+    //weapon
+    weapon = game.add.weapon(30, 'sprites', 'chair.png');
+    //merpy merp bullets are killed
+    weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+    weapon.bulletSpeed = 500;
+    weapon.fireRate = 600;
+
+
     // main character
     katie = game.add.sprite (700, 300, 'sprites','katie.png');
     game.physics.p2.enable(katie);
     katie.body.setCircle(30);
     katie.body.setZeroDamping();
+    katie.scale.x *= -1;
+
+    katie.anchor.set(0.5);
   	katie.body.fixedRotation = true;
     katie.smoothed = false;
 
@@ -79,6 +93,12 @@ let scoreText;
     katie.body.collides(studentCollisionGroup, hitStudent);
 
     game.camera.follow(katie);
+
+    weapon.trackSprite(katie, 0, 0, true);
+
+    fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+
+
     // -----------------------------------------------------------
     // students.body.velocity.setTo(-10, 0);
     // ----------------------------------------------------------- Trying tables collision
@@ -161,18 +181,7 @@ let scoreText;
     //
       //  table1.body.collides(playerCollisionGroup, studentCollisionGroup);
 
-      table1.body.setCircle(30,30);
-      table2.body.setCircle(30,30);
-      table3.body.setCircle(30,30);
-      table4.body.setCircle(30,30);
-      table5.body.setCircle(30,30);
-      table6.body.setCircle(30,30);
-      table7.body.setCircle(30,30);
-      table8.body.setCircle(30,30);
-      table9.body.setCircle(30,30);
-      table10.body.setCircle(30,30);
-      table11.body.setCircle(30,30);
-      table12.body.setCircle(30,30);
+      // table1.body.setCircle(30,30);
 
       // table1.body.static = true;
       // table1.body.setCollisionGroup(lilTableCollisionGroup);
@@ -188,7 +197,7 @@ let scoreText;
     scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
 
-    // timerText = game.add.text(560, 16, 'Time: ', { fontSize: '32px', fill: '#000' });
+    timerText = game.add.text(560, 16, 'Time: ', { fontSize: '32px', fill: '#000' });
     game.time.events.add(Phaser.Timer.SECOND * 45, fadePicture);
 
   }
@@ -197,6 +206,7 @@ let scoreText;
   function fadePicture() {
     game.add.tween(katie).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
     // table1.destroy();
+    // katie.destroy();
     }
 
 
@@ -236,13 +246,17 @@ let scoreText;
       {
         katie.body.moveDown(350);
       }
+    if (fireButton.isDown)
+      {
+      weapon.fire();
+      }
   }
 
   function render() {
     scoreText.text = 'Score: ' + score;
-    // timerText.text = 'Time: ' + timer;
+    timerText.text = 'Time Left: ' + game.time.events.duration;
 
     // game.debug.text('Move the students out of the way ' + scoreText.text, 32, 32);
-    game.debug.text("Time until event: " + game.time.events.duration, 32, 32);
+    // game.debug.text("Time until event: " + game.time.events.duration, 32, 32);
 
   }

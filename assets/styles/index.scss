@@ -1,13 +1,22 @@
-// $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
-// @import '~bootstrap-sass/assets/stylesheets/bootstrap';
-
-// $black: #000;
+$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';
+$black: #000;
 $white: #fff;
 
 body {
   // background-color: $black;
-  color: $white;
+  color: $black;
   font-family: arial;
   margin: 0;
   padding: 0;
+  background-image: url('polkadots.png');
+  background-position: center;
 }
+
+.navbar-brand {
+  color: $black;
+}
+
+// #show-game {
+//   display: none;
+// }
