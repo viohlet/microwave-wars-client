@@ -106,9 +106,46 @@
            </div>
          </div>
 
+         <!-- game history -->
+         <div class="modal fade" id="game-history" tabindex="-1" role="dialog" aria-labelledby="game-history" aria-hidden="true">
+           <div class="modal-dialog"  role="document">
+             <div class="modal-content">
+               <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               </div>
+               <div>
+                 <p>Total Games: <span id='total-games'></span></p>
+                 <p>Hightest Score: <span id='highest-score'></span></p>
+                 <p>Lowest Score: <span id='lowest-score'></span></p>
+               </div>
+               <div class="modal-footer">
+                 <input id='clean-history' type="submit" value="Clean History" class="btn btn-default">
+               </div>
+             </div>
+           </div>
+         </div>
 
 
-       <div id="show-game"> </div>
+         <!-- <div class='welcome-screen' id="welcomediv">
+           <span> This is Katie </span>
+         </div> -->
+
+         <div id="maindiv">
+           <div id="scorediv">
+               <label>score：</label>
+               <label id="label">0</label>
+           </div>
+         </div>
+
+         <!-- <div id="enddiv">
+             <p class="plantext">total score</p>
+             <p id="characterscore">0</p>
+             <div><button id='gameover'>quit</button></div>
+         </div> -->
+
+       <div id="showgame">
+
+       </div>
 
 
     </body>
