@@ -15,10 +15,15 @@ const onStartGameSuccess = function (){
 
 const onIndexGamesSuccess = (data) => {
   document.getElementById("message").innerHTML = 'Games played: '+ data.games.length;
+  console.log(data.games);
   $('#message').fadeIn('fast').delay(4000).fadeOut('fast');
 };
 
-
+const onDeleteGamesSuccess = (data) => {
+  document.getElementById("message").innerHTML = 'Games played: '+ data.games.length;
+  console.log(data.games);
+  $('#message').fadeIn('fast').delay(4000).fadeOut('fast');
+};
 
 
 
@@ -33,6 +38,7 @@ const failure = (error) => {
 module.exports = {
   onStartGameSuccess,
   onIndexGamesSuccess,
+  onDeleteGamesSuccess,
   failure,
   success,
 };

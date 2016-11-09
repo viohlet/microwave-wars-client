@@ -33,6 +33,14 @@ const indexGames = () => {
   });
 };
 
+const deleteGames = () => $.ajax({
+  url: app.host + '/games',
+  method: 'DELETE',
+  headers: {
+    Authorization: 'Token token=' + app.user.token,
+  },
+});
+
 // const update = function (data) {
 //   console.log(data);
 //   return $.ajax({
@@ -49,16 +57,27 @@ const indexGames = () => {
 //   });
 // };
 
+// const updateGame = (index, value, over1) => {
+//   return $.ajax({
+//     url: app.host + '/games/' + app.game.id,
+//     method: 'PATCH',
+//     headers: {
+//       Authorization: 'Token token=' + app.user.token,
+//     },
+//     data: {
+//       'game': {
+//         'cell': {
+//           'index': index,
+//           'value': value,
+//         },
+//         'over': over1,
+//       }
+//     }
+//   });
+// };
 
 
 
-// const cleanHistory = () => $.ajax({
-//   url: app.api + '/mygames',
-//   method: 'DELETE',
-//   headers: {
-//     Authorization: 'Token token=' + app.user.token,
-//   },
-// });
 
 module.exports = {
   newGame,
@@ -66,5 +85,5 @@ module.exports = {
   indexGames,
   // displayRanking,
   // getMyGames,
-  // cleanHistory,
+  deleteGames,
 };

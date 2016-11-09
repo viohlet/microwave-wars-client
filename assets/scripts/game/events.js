@@ -4,6 +4,7 @@ const getFormFields = require(`../../../lib/get-form-fields`);
 
 const api = require('./api');
 const ui = require('./ui');
+
 // const main = require('./main');
 
 
@@ -30,10 +31,17 @@ const onIndexGames = function (event) {
     .fail(ui.onError);
 };
 
+const onDeleteGames = function (event) {
+  event.preventDefault();
+  api.deleteGames()
+      .done(ui.success)
+      .fail(ui.failure);
+};
 
 const addHandlers = () => {
   $('#index-games').on('submit', onIndexGames);
   $('#startbutton').on('click', onCreate);
+  $('#delete-games').on('submit', onDeleteGames);
 };
 
 module.exports = {
