@@ -4,6 +4,8 @@ const getFormFields = require(`../../../lib/get-form-fields`);
 
 const api = require('./api');
 const ui = require('./ui');
+// const main = require('./main');
+
 
 const onCreate = function () {
   api.newGame()
@@ -11,35 +13,27 @@ const onCreate = function () {
     .fail(ui.onError);
 };
 
-// const onCreate = function (event) {
-//   event.preventDefault();
-// 	let data = getFormFields(event.target);
-//   api.create(data)
-// 	  .done(ui.onStartGameSuccess)
-// 	  .fail(ui.failure);
+// const showGameHistory = function (data) {
+//   let total = 0;
+//   if (data.games[0]) {
+//     total = data.games.length;
+//   }
+//
+//   $('#total-games').html(`${total}`);
+//   $('#game-history').modal('show');
 // };
 
-// const onCreate = function (event) {
-//   event.preventDefault();
-// 	let data = getFormFields(event.target);
-//   api.create(data)
-// 	  .done(ui.onStartGameSuccess)
-// 	  .fail(ui.failure);
-// };
+const onIndexGames = function (event) {
+  event.preventDefault();
+  api.indexGames()
+    .done(ui.onIndexGamesSuccess)
+    .fail(ui.onError);
+};
+
 
 const addHandlers = () => {
-	// $('#addnewtitle').on('submit', onNewProject);
-  // $('#get-projects').on('submit', onGetProjects);
-  // $('#show-project').on('submit', onShowProject);
-  // $('.title-display').on('click','.update-project',updateId);
-  // $('#updateProjectModal').on('submit', onUpdateProject);
-  // $('#show-game').on('click','.delete-project',deleteId);
-  // $('#delete-project-button').on('click', onDeleteProject);
-  // $('#showusbtn').on('submit', onShowUserStories);
-  // $('#createnewstory').on('submit', onCreateUserStory);
+  $('#index-games').on('submit', onIndexGames);
   $('#startbutton').on('click', onCreate);
-
-
 };
 
 module.exports = {

@@ -23,6 +23,16 @@ const newGame = function () {
   }).then(data => gameId = data.game.id);
 };
 
+const indexGames = () => {
+  return $.ajax({
+    url: app.host + '/games',
+    method: 'GET',
+    headers: {
+      Authorization: 'Token token=' + app.user.token,
+    }
+  });
+};
+
 // const update = function (data) {
 //   console.log(data);
 //   return $.ajax({
@@ -39,26 +49,7 @@ const newGame = function () {
 //   });
 // };
 
-// const getMyGames = function () {
-//   return $.ajax({
-//     url: app.api + '/mygames',
-//     method: 'GET',
-//     headers: {
-//       Authorization: 'Token token=' + authApi.app.user.token,
-//     },
-//
-//   });
-// };
 
-// const getGames = function () {
-//   return $.ajax({
-//     url: app.api + '/games',
-//     method: 'GET',
-//     headers: {
-//       Authorization: 'Token token=' + authApi.app.user.token,
-//     },
-//   });
-// };
 
 
 // const cleanHistory = () => $.ajax({
@@ -72,7 +63,7 @@ const newGame = function () {
 module.exports = {
   newGame,
   // update,
-  // getGames,
+  indexGames,
   // displayRanking,
   // getMyGames,
   // cleanHistory,

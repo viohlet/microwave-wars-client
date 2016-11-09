@@ -1,5 +1,5 @@
-
 'use strict';
+
 
 const game = new Phaser.Game(800, 600, Phaser.AUTO, 'showgame', {
   preload: preload,
@@ -219,7 +219,7 @@ function create() {
 
 
   timerText = game.add.text(560, 16, 'Time: ', { fontSize: '32px', fill: '#000' });
-  game.time.events.add(Phaser.Timer.SECOND * 15, fadePicture);
+  game.time.events.add(Phaser.Timer.SECOND * 25, fadePicture);
 }
 
 
