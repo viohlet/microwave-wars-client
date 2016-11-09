@@ -1,3 +1,3 @@
-// 'use strict';
-//
-// const app = require('../app');
+'use strict';
+
+const app = require('../app');

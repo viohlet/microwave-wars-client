@@ -215,6 +215,7 @@ let fireButton;
     // for each {student.sprite.alpha -= 0.5};
     student.sprite.alpha -= 1;
     score += 10;
+    console.log("score is ", score);
     student.destroy();
 
     // if (student === null)
