@@ -1,6 +1,8 @@
 'use strict';
 
 const app = require('../app');
+// const main = require('../main');
+
 
 const onStartGameSuccess = function (){
   $('#showgame').css('display', 'block');

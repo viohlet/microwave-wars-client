@@ -1,646 +1,249 @@
 // 'use strict';
 //
-// let P2Game = {};
+// // const main = require('./main');
 //
-// P2Game.StateA = function (game) {
+// let game = new Phaser.Game(800, 600, Phaser.CANVAS, 'showgame', {
+//   preload: preload,
+//   create: create,
+//   update: update,
+//   render: render,
+// });
 //
-//     this.contra;
-//     this.block;
-//     this.tetris1;
-//     this.changeTimer;
 //
-//     this.cursors;
+// function preload () {
+//   game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+//   game.scale.pageAlignHorizontally = true;
+//   game.scale.pageAlignVertically = true;
+//   game.stage.backgroundColor = '#000';
+//   game.load.image('ground', './assets/scripts/game/images/ground.jpg');
+//   game.load.atlasJSONHash(
+//     'sprites',
+//     './assets/scripts/game/images/spritesheet-mini.png',
+//     './assets/scripts/game/images/spritesheet-mini.json'
+//   );
+//   game.load.atlasJSONHash(
+//     'enemies',
+//     './assets/scripts/game/images/students.png',
+//     './assets/scripts/game/images/students.json'
+//   );
+//   // main.onCreate();
+// }
 //
-//     let cursors;
+// let katie;
+// let students;
+// let cursors;
+// let score = 0;
+// let scoreText;
+// let timerText;
+// let weapon;
+// let fireButton;
+// let table1;
+// let showgame = document.getElementById('showgame');
+// let scorediv = document.getElementById('scorediv');
+// let scorelabel = document.getElementById('label');
 //
-//     this.result = 'Move with cursors. Hit an object to change State';
+// function create() {
 //
-// };
+//   let ground = game.add.image(0, 0, 'ground');
+//   ground.fixedToCamera = true;
 //
-// P2Game.StateA.prototype = {
+//   //	Enable p2 physics
+// 	game.physics.startSystem(Phaser.Physics.P2JS);
 //
-//     preload: function () {
+// // Turn on impact events for the world, without this we get no collision callbacks
+//   game.physics.p2.setImpactEvents(true);
 //
-//         this.load.image('ktab', './assets/scripts/game/images/polygon.png');
-//         this.load.image('katie', './assets/scripts/game/images/polygon.png');
-//         this.load.image('rabbithole', './assets/scripts/game/images/polygon.png');
-//         // game.load.atlasJSONHash(
-//         //   'sprites',
-//         //   './assets/scripts/game/images/spritesheet-mini.png',
-//         //   './assets/scripts/game/images/spritesheet-mini.json'
-//         // );
+//   game.physics.p2.defaultRestitution = 0.8;
 //
-//         this.load.physics('physicsData', './assets/scripts/game/images/spritesheet-mini.json');
+//   // Collission Groups
+//   let playerCollisionGroup = game.physics.p2.createCollisionGroup();
+//   let studentCollisionGroup = game.physics.p2.createCollisionGroup();
+//   // let lilTableCollisionGroup = game.physics.p2.createCollisionGroup();   //// Trying tables collision
 //
-//     },
+//   // Objects with their own collision groups still collide with the world bounds:
+//   game.physics.p2.updateBoundsCollisionGroup();
 //
-//     create: function () {
+//   // random location
+//   let x = game.world.randomX;
+//   let y = game.world.randomY;
 //
-//         this.game.stage.backgroundColor = '#806000';
+//   //weapon
+//   weapon = game.add.weapon(30, 'sprites', 'chair.png');
+//   //merpy merp bullets are killed
+//   weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+//   weapon.bulletSpeed = 500;
+//   weapon.fireRate = 600;
 //
-//         this.physics.startSystem(Phaser.Physics.P2JS);
 //
-//         this.physics.p2.restitution = 0.9;
+//   // main character
+//   katie = game.add.sprite (700, 300, 'sprites','katie.png');
 //
-//         this.contra = this.add.sprite(200, 200, 'ktab');
-//         this.block = this.add.sprite(500, 200, 'katie');
-//         this.tetris1 = this.add.sprite(100, 450, 'rabbithole');
+//   game.physics.p2.enable(katie);
+//   katie.body.setCircle(30);
+//   katie.body.setZeroDamping();
+//   katie.scale.x *= -1;
 //
-//         this.physics.p2.enable([ this.contra, this.block, this.tetris1 ], false);
+//   katie.anchor.set(0.5);
+// 	katie.body.fixedRotation = true;
+//   katie.smoothed = false;
 //
-//         this.contra.body.clearShapes();
-//         this.contra.body.loadPolygon('physicsData', 'ktab');
+//   katie.body.setCollisionGroup(playerCollisionGroup);
+//   katie.body.collides(studentCollisionGroup);
 //
-//         this.tetris1.body.clearShapes();
-//         this.tetris1.body.loadPolygon('physicsData', 'rabbithole');
+//   game.camera.follow(katie);
 //
-//         this.cursors = this.input.keyboard.createCursorKeys();
+//   weapon.trackSprite(katie, 0, 0, true);
 //
-//         this.block.body.onBeginContact.add(this.blockHit, this);
+//   fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 //
-//     },
+//   let students = game.add.group();
+//   students.enableBody = true;
+//   students.physicsBodyType = Phaser.Physics.P2JS;
+//   students.smoothed = false;
 //
-//     blockHit: function (body, shapeA, shapeB, equation) {
+//   for (let i = 0; i < 23; i++)
+//   {
+//     // let student = students.create(190 + 69 * i, -90, 'enemies', i);
+//     let student = students.create(x, y, 'enemies', i);
+//     student.body.setRectangle(30,30, 0, 0, 4);
+//     // student.body.setCircle(30);
+//     // student.health = 2;
+//     student.body.setZeroDamping();
 //
-//         //  We hit the wall, not a sprite
-//         if (body === null) { return; }
+//     student.body.fixedRotation = true;
+//     student.body.setCollisionGroup(studentCollisionGroup);
+//     student.body.collides([ studentCollisionGroup, playerCollisionGroup ]);
+//   }
 //
-//         if (body.sprite.key === 'ktab')
-//         {
-//            this.changeTimer = this.game.time.events.add(3000, this.gotoStateB, this);
-//         }
-//         else if (body.sprite.key === 'rabbithole')
-//         {
-//            this.changeTimer = this.game.time.events.add(3000, this.gotoStateC, this);
-//         }
+//   students.setAll('inputEnabled', true);
+//   students.setAll('input.useHandCursor', true);
+//   students.forEach(function(student) {
+//     student.events.onInputDown.add(listener, this);
+//   });
 //
-//     },
+//   let table1 = game.add.sprite (662, 170, 'sprites', 'table.png');
+//   // table1.BodyDebug.body.collides(playerCollisionGroup, studentCollisionGroup);
+//   // game.physics.p2.enable(table1);
+//   let table2 = game.add.sprite (624, 170, 'sprites', 'table.png');
+//   let table3 = game.add.sprite (562, 170, 'sprites', 'table.png');
+//   let table4 = game.add.sprite (512, 170, 'sprites', 'table.png');
+//   let table5 = game.add.sprite (300, 190, 'sprites', 'table.png');
+//   let table6 = game.add.sprite (262, 190, 'sprites', 'table.png');
+//   let table7 = game.add.sprite (212, 190, 'sprites', 'table.png');
+//   let table8 = game.add.sprite (150, 190, 'sprites', 'table.png');
+//   let table9 = game.add.sprite (750, 300, 'sprites', 'table.png');
+//   let table10 = game.add.sprite (700, 300, 'sprites', 'table.png');
+//   let table11 = game.add.sprite (650, 300, 'sprites', 'table.png');
+//   let table12 = game.add.sprite (500, 300, 'sprites', 'table.png');
+//   let table13 = game.add.sprite (450, 300, 'sprites', 'table.png');
+//   let table14 = game.add.sprite (200, 400, 'sprites', 'table.png');
+//   let table15 = game.add.sprite (150, 350, 'sprites', 'table.png');
+//   let table16 = game.add.sprite (100, 300, 'sprites', 'table.png');
+//   let table17 = game.add.sprite (40, 250, 'sprites', 'table.png');
+//   let table18 = game.add.sprite (700, 450, 'sprites', 'table.png');
+//   let table19 = game.add.sprite (650, 450, 'sprites', 'table.png');
+//   let table20 = game.add.sprite (600, 450, 'sprites', 'table.png');
+//   let table21 = game.add.sprite (550, 450, 'sprites', 'table.png');
+//   let table22 = game.add.sprite (350, 515, 'sprites', 'table.png');
+//   let table23 = game.add.sprite (300, 515, 'sprites', 'table.png');
+//   let table24 = game.add.sprite (250, 515, 'sprites', 'table.png');
+//   let table25 = game.add.sprite (200, 515, 'sprites', 'table.png');
+//   let table26 = game.add.sprite (600, 50, 'sprites', 'table.png');
+//   let table27 = game.add.sprite (550, 50, 'sprites', 'table.png');
+//   let table28 = game.add.sprite (700, 170, 'sprites', 'table.png');
+//   //door
+//   let door = game.add.sprite (20, 500, 'sprites', 'door.png');
 //
-//     gotoStateB: function () {
+//   game.physics.p2.enable([ table1, table2, table3, table4, table5, table6,
+//                            table7, table8, table9, table10, table11, table12,
+//                            door, table13, table14, table15, table16, table17,
+//                            table18, table19, table20, table21, table22, table23,
+//                            table24, table25, table26, table27, table28
+//                         ]);
 //
-//         this.state.start('StateB');
+//   table1.body.static = true;
 //
-//     },
 //
-//     gotoStateC: function () {
+//   cursors = game.input.keyboard.createCursorKeys();
 //
-//         this.state.start('StateC');
+//   scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 //
-//     },
+//   timerText = game.add.text(560, 16, 'Time: ', { fontSize: '32px', fill: '#000' });
+//   game.time.events.add(Phaser.Timer.SECOND * 30, fadePicture);
+// }
 //
-//     update: function () {
 //
-//         this.block.body.setZeroVelocity();
+//   // function hitStudent(katie, student) {
+//     // student.health = 2;
+//     // for each {student.sprite.alpha -= 0.5};
+//     // student.sprite.alpha -= 0.5;
+//     // score += 10;
+//     // student.destroy();
+//   // }
 //
-//         if (this.cursors.left.isDown)
-//         {
-//             this.block.body.moveLeft(200);
-//         }
-//         else if (this.cursors.right.isDown)
-//         {
-//             this.block.body.moveRight(200);
-//         }
+// // GAME OVER
+// function gameover () {
+//   game.destroy();
+// }
 //
-//         if (this.cursors.up.isDown)
-//         {
-//             this.block.body.moveUp(200);
-//         }
-//         else if (this.cursors.down.isDown)
-//         {
-//             this.block.body.moveDown(200);
-//         }
 //
-//     },
+// function fadePicture() {
+//   game.add.tween(katie).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
+//   game.add.tween(scoreText).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
 //
-//     render: function () {
+//   let nameLabel = game.add.text(80, 80, 'GAME OVER. Click on a Student to Continue',
+//                                 {font: '24px Arial', fill: '#ffffff'});
+//   }
 //
-//         if (this.changeTimer)
-//         {
-//             this.game.debug.text('Changing in: ' + game.time.events.duration, 32, 32);
-//         }
-//         else
-//         {
-//             this.game.debug.text(this.result, 32, 32);
-//         }
+// function update() {
 //
-//         this.game.debug.text("State A", 32, 560);
+//   katie.body.setZeroVelocity();
 //
+//   if (cursors.left.isDown)
+//     {
+//       katie.body.moveLeft(350);
 //     }
-//
-// };
-//
-// //  State B
-//
-// P2Game.StateB = function (game) {
-//
-//     this.contra;
-//     this.block;
-//     this.tetris1;
-//     this.changeTimer;
-//
-//     this.cursors;
-//
-//     this.result = 'Move with cursors. Hit an object to change State';
-//
-// };
-//
-// P2Game.StateB.prototype = {
-//
-//     create: function () {
-//
-//         this.game.stage.backgroundColor = '#008060';
-//
-//         this.physics.p2.restitution = 0.9;
-//
-//         this.contra = this.add.sprite(500, 200, 'ktab');
-//         this.block = this.add.sprite(200, 200, 'katie');
-//         this.tetris1 = this.add.sprite(300, 450, 'rabbithole');
-//
-//         this.physics.p2.enable([ this.contra, this.block, this.tetris1 ], false);
-//
-//         this.contra.body.clearShapes();
-//         this.contra.body.loadPolygon('physicsData', 'ktab');
-//
-//         this.tetris1.body.clearShapes();
-//         this.tetris1.body.loadPolygon('physicsData', 'rabbithole');
-//
-//         this.cursors = this.input.keyboard.createCursorKeys();
-//
-//         this.block.body.onBeginContact.add(this.blockHit, this);
-//
-//     },
-//
-//     blockHit: function (body, shapeA, shapeB, equation) {
-//
-//         //  We hit the wall, not a sprite
-//         if (body === null) { return; }
-//
-//         if (body.sprite.key === 'ktab')
-//         {
-//            this.changeTimer = this.game.time.events.add(3000, this.gotoStateA, this);
-//         }
-//         else if (body.sprite.key === 'rabbithole')
-//         {
-//            this.changeTimer = this.game.time.events.add(3000, this.gotoStateC, this);
-//         }
-//
-//     },
-//
-//     gotoStateA: function () {
-//
-//         this.state.start('StateA');
-//
-//     },
-//
-//     gotoStateC: function () {
-//
-//         this.state.start('StateC');
-//
-//     },
-//
-//     update: function () {
-//
-//         this.block.body.setZeroVelocity();
-//
-//         if (this.cursors.left.isDown)
-//         {
-//             this.block.body.moveLeft(200);
-//         }
-//         else if (this.cursors.right.isDown)
-//         {
-//             this.block.body.moveRight(200);
-//         }
-//
-//         if (this.cursors.up.isDown)
-//         {
-//             this.block.body.moveUp(200);
-//         }
-//         else if (this.cursors.down.isDown)
-//         {
-//             this.block.body.moveDown(200);
-//         }
-//
-//     },
-//
-//     render: function () {
-//
-//         if (this.changeTimer)
-//         {
-//             this.game.debug.text('Changing in: ' + game.time.events.duration, 32, 32);
-//         }
-//         else
-//         {
-//             this.game.debug.text(this.result, 32, 32);
-//         }
-//
-//         this.game.debug.text("State B", 32, 560);
-//
+//   else if (cursors.right.isDown)
+//     {
+//       katie.body.moveRight(350);
 //     }
-//
-// };
-//
-// //  State C
-//
-// P2Game.StateC = function (game) {
-//
-//     this.contra;
-//     this.block;
-//     this.tetris1;
-//     this.changeTimer;
-//
-//     this.cursors;
-//
-//     this.result = 'Move with cursors. Hit an object to change State';
-//
-// };
-//
-// P2Game.StateC.prototype = {
-//
-//     create: function () {
-//
-//         this.game.stage.backgroundColor = '#004a80';
-//
-//         this.physics.p2.restitution = 0.5;
-//
-//         this.contra = this.add.sprite(500, 300, 'ktab');
-//         this.block = this.add.sprite(100, 500, 'katie');
-//         this.tetris1 = this.add.sprite(200, 150, 'rabbithole');
-//
-//         this.physics.p2.enable([ this.contra, this.block, this.tetris1 ], false);
-//
-//         this.contra.body.clearShapes();
-//         this.contra.body.loadPolygon('physicsData', 'ktab');
-//
-//         this.tetris1.body.clearShapes();
-//         this.tetris1.body.loadPolygon('physicsData', 'rabbithole');
-//
-//         this.cursors = this.input.keyboard.createCursorKeys();
-//
-//         this.block.body.onBeginContact.add(this.blockHit, this);
-//
-//     },
-//
-//     blockHit: function (body, shapeA, shapeB, equation) {
-//
-//         //  We hit the wall, not a sprite
-//         if (body === null) { return; }
-//
-//         if (body.sprite.key === 'ktab')
-//         {
-//            this.changeTimer = this.game.time.events.add(3000, this.gotoStateA, this);
-//         }
-//         else if (body.sprite.key === 'rabbithole')
-//         {
-//            this.changeTimer = this.game.time.events.add(3000, this.gotoStateB, this);
-//         }
-//
-//     },
-//
-//     gotoStateA: function () {
-//
-//         this.state.start('StateA');
-//
-//     },
-//
-//     gotoStateB: function () {
-//
-//         this.state.start('StateB');
-//
-//     },
-//
-//     update: function () {
-//
-//         this.block.body.setZeroVelocity();
-//
-//         if (this.cursors.left.isDown)
-//         {
-//             this.block.body.moveLeft(200);
-//         }
-//         else if (this.cursors.right.isDown)
-//         {
-//             this.block.body.moveRight(200);
-//         }
-//
-//         if (this.cursors.up.isDown)
-//         {
-//             this.block.body.moveUp(200);
-//         }
-//         else if (this.cursors.down.isDown)
-//         {
-//             this.block.body.moveDown(200);
-//         }
-//
-//     },
-//
-//     render: function () {
-//
-//         if (this.changeTimer)
-//         {
-//             this.game.debug.text('Changing in: ' + game.time.events.duration, 32, 32);
-//         }
-//         else
-//         {
-//             this.game.debug.text(this.result, 32, 32);
-//         }
-//
-//         this.game.debug.text("State C", 32, 560);
-//
+//   if (cursors.up.isDown)
+//     {
+//       katie.body.moveUp(350);
 //     }
-//
-// };
-//
-// let game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example');
-//
-// game.state.add('StateA', P2Game.StateA);
-// game.state.add('StateB', P2Game.StateB);
-// game.state.add('StateC', P2Game.StateC);
-//
-// game.state.start('StateA');
-//
-// module.exports = true;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 'use strict';
-//
-// // <script type="text/javascript">
-//
-//
-// let game = {};
-//
-// // let game = new Phaser.Game(800, 600, Phaser.AUTO, '');
-// //
-// // game.state.add('StateA', game.StateA);
-// // game.state.add('StateB', game.StateB);
-//
-// // game.state.start('StateA');
-//
-// let StateA;
-// let StateB;
-//
-// // game.StateA = function(game) {
-// //   let StateB;
-// // };
-//
-// game.StateA.prototype = {
-//
-//     create: function () {
-//       let nameLabel = game.add.text(80, 80, 'You have 10 seconds. Ready? Go!',
-//                                     {font: '24px Arial', fill: '#ffffff'});
-//       let key = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-//       key.onDown.addOnce(StateB);
-//     },
-//
-//     gotoStateB: function () {
-//       game.state.start('StateB');
-//     },
-// };
-//
-//
-//
-// game.StateB = function(game) {
-//   let katie;
-//   let students;
-//   let cursors;
-//   let score = 0;
-//   let scoreText;
-//   let timerText;
-//   let weapon;
-//   let fireButton;
-// };
-//
-// game.StateB.prototype = {
-//
-//       preload: function () {
-//         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-//         game.scale.pageAlignHorizontally = true;
-//         game.scale.pageAlignVertically = true;
-//         game.stage.backgroundColor = '#000';
-//         game.load.image('ground', './assets/scripts/game/images/ground.jpg');
-//         game.load.atlasJSONHash(
-//           'sprites',
-//           './assets/scripts/game/images/spritesheet-mini.png',
-//           './assets/scripts/game/images/spritesheet-mini.json'
-//         );
-//         game.load.atlasJSONHash(
-//           'enemies',
-//           './assets/scripts/game/images/students.png',
-//           './assets/scripts/game/images/students.json'
-//         );
-//       },
-//
-//       create: function() {
-//
-//         let ground = game.add.image(0, 0, 'ground');
-//         ground.fixedToCamera = true;
-//
-//         //	Enable p2 physics
-//       	game.physics.startSystem(Phaser.Physics.P2JS);
-//
-//       // Turn on impact events for the world, without this we get no collision callbacks
-//         game.physics.p2.setImpactEvents(true);
-//
-//         game.physics.p2.defaultRestitution = 0.8;
-//
-//         // Collission Groups
-//         let playerCollisionGroup = game.physics.p2.createCollisionGroup();
-//         let studentCollisionGroup = game.physics.p2.createCollisionGroup();
-//         // this.lilTableCollisionGroup = game.physics.p2.createCollisionGroup();   //// Trying tables collision
-//
-//         // Objects with their own collision groups still collide with the world bounds:
-//         game.physics.p2.updateBoundsCollisionGroup();
-//
-//         // random location
-//         let x = game.world.randomX;
-//         let y = game.world.randomY;
-//
-//         //weapon
-//         let weapon = game.add.weapon(30, 'sprites', 'chair.png');
-//         //merpy merp bullets are killed
-//         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-//         weapon.bulletSpeed = 500;
-//         weapon.fireRate = 600;
-//
-//
-//         // main character
-//         this.katie = game.add.sprite (700, 300, 'sprites','katie.png');
-//         game.physics.p2.enable(katie);
-//         katie.body.setCircle(30);
-//         katie.body.setZeroDamping();
-//         katie.scale.x *= -1;
-//
-//         katie.anchor.set(0.5);
-//       	katie.body.fixedRotation = true;
-//         katie.smoothed = false;
-//
-//         katie.body.setCollisionGroup(playerCollisionGroup);
-//         katie.body.collides(studentCollisionGroup, hitStudent);
-//
-//         game.camera.follow(katie);
-//
-//         weapon.trackSprite(katie, 0, 0, true);
-//
-//         this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-//
-//         this.students = game.add.group();
-//         students.enableBody = true;
-//         students.physicsBodyType = Phaser.Physics.P2JS;
-//         students.smoothed = false;
-//
-//
-//         for (let i = 0; i < 23; i++)
-//         {
-//           // let student = students.create(190 + 69 * i, -90, 'enemies', i);
-//           let student = students.create(x, y, 'enemies', i);
-//           student.body.setRectangle(30,30, 0, 0, 4);
-//           // student.body.setCircle(30);
-//           // student.health = 2;
-//           student.body.setZeroDamping();
-//
-//           student.body.fixedRotation = true;
-//           student.body.setCollisionGroup(studentCollisionGroup);
-//           student.body.collides([ studentCollisionGroup, playerCollisionGroup ]);
-//           // student.body.velocity.setTo(10, 0);
-//         }
-//
-//         let table1 = game.add.sprite (662, 170, 'sprites', 'table.png');
-//         // table1.BodyDebug.body.collides(playerCollisionGroup, studentCollisionGroup);
-//         // game.physics.p2.enable(table1);
-//
-//         let table2 = game.add.sprite (624, 170, 'sprites', 'table.png');
-//         let table3 = game.add.sprite (562, 170, 'sprites', 'table.png');
-//         let table4 = game.add.sprite (512, 170, 'sprites', 'table.png');
-//         let table5 = game.add.sprite (300, 190, 'sprites', 'table.png');
-//         let table6 = game.add.sprite (262, 190, 'sprites', 'table.png');
-//         let table7 = game.add.sprite (212, 190, 'sprites', 'table.png');
-//         let table8 = game.add.sprite (150, 190, 'sprites', 'table.png');
-//         let table9 = game.add.sprite (750, 300, 'sprites', 'table.png');
-//         let table10 = game.add.sprite (700, 300, 'sprites', 'table.png');
-//         let table11 = game.add.sprite (650, 300, 'sprites', 'table.png');
-//         let table12 = game.add.sprite (500, 300, 'sprites', 'table.png');
-//         let table13 = game.add.sprite (450, 300, 'sprites', 'table.png');
-//         let table14 = game.add.sprite (200, 400, 'sprites', 'table.png');
-//         let table15 = game.add.sprite (150, 350, 'sprites', 'table.png');
-//         let table16 = game.add.sprite (100, 300, 'sprites', 'table.png');
-//         let table17 = game.add.sprite (40, 250, 'sprites', 'table.png');
-//         let table18 = game.add.sprite (700, 450, 'sprites', 'table.png');
-//         let table19 = game.add.sprite (650, 450, 'sprites', 'table.png');
-//         let table20 = game.add.sprite (600, 450, 'sprites', 'table.png');
-//         let table21 = game.add.sprite (550, 450, 'sprites', 'table.png');
-//         let table22 = game.add.sprite (350, 515, 'sprites', 'table.png');
-//         let table23 = game.add.sprite (300, 515, 'sprites', 'table.png');
-//         let table24 = game.add.sprite (250, 515, 'sprites', 'table.png');
-//         let table25 = game.add.sprite (200, 515, 'sprites', 'table.png');
-//         let table26 = game.add.sprite (600, 50, 'sprites', 'table.png');
-//         let table27 = game.add.sprite (550, 50, 'sprites', 'table.png');
-//         let table28 = game.add.sprite (700, 170, 'sprites', 'table.png');
-//         //door
-//         let door = game.add.sprite (20, 500, 'sprites', 'door.png');
-//
-//         game.physics.p2.enable([ table1, table2, table3, table4, table5, table6,
-//                                  table7, table8, table9, table10, table11, table12,
-//                                  door, table13, table14, table15, table16, table17,
-//                                  table18, table19, table20, table21, table22, table23,
-//                                  table24, table25, table26, table27, table28
-//                               ]);
-//         //
-//           //  table1.body.collides(playerCollisionGroup, studentCollisionGroup);
-//
-//           // table1.body.setCircle(30,30);
-//
-//           // table1.body.static = true;
-//           // table1.body.setCollisionGroup(lilTableCollisionGroup);
-//           // table1.body.collides([ studentCollisionGroup, playerCollisionGroup ]);
-//
-//
-//           // table1.body.collides(katie, students);
-//           // table4.body.collides(katie, students);
-//
-//
-//         this.cursors = game.input.keyboard.createCursorKeys();
-//
-//         this.scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
-//
-//
-//         this.timerText = game.add.text(560, 16, 'Time: ', { fontSize: '32px', fill: '#000' });
-//         game.time.events.add(Phaser.Timer.SECOND * 45, fadePicture);
-//
-//       },
-//
-//
-//       fadePicture: function () {
-//         game.add.tween(katie).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
-//         // table1.destroy();
-//         // katie.destroy();
-//       },
-//
-//
-//       hitStudent: function(katie, student) {
-//         // student.health = 2;
-//         // for each {student.sprite.alpha -= 0.5};
-//         student.sprite.alpha -= 1;
-//         score += 10;
-//         console.log("score is ", score);
-//         student.destroy();
-//
-//         // if (student === null)
-//         // {
-//         //   this.changeTimer = this.game.time.events.add(1000, this.gotoStateB, this);
-//         // }
-//       },
-//
-//       update: function() {
-//
-//         // katie.body.collides(furnitures);
-//         // furnitures.body.collides(katie);
-//
-//         katie.body.setZeroVelocity();
-//
-//         if (cursors.left.isDown)
-//           {
-//             katie.body.moveLeft(350);
-//           }
-//         else if (cursors.right.isDown)
-//           {
-//             katie.body.moveRight(350);
-//           }
-//         if (cursors.up.isDown)
-//           {
-//             katie.body.moveUp(350);
-//           }
-//         else if (cursors.down.isDown)
-//           {
-//             katie.body.moveDown(350);
-//           }
-//         if (fireButton.isDown)
-//           {
-//           weapon.fire();
-//           }
-//       },
-//
-//       render: function () {
-//         scoreText.text = 'Score: ' + score;
-//         timerText.text = 'Time Left: ' + game.time.events.duration;
-//         // game.debug.text('Move the students out of the way ' + scoreText.text, 32, 32);
-//         // game.debug.text("Time until event: " + game.time.events.duration, 32, 32);
-//       }
-//     };
-//
-// game = new Phaser.Game(800, 600, Phaser.AUTO, '');
-//
-// game.state.add('StateA', game.StateA);
-// game.state.add('StateB', game.StateB);
-//
-// game.state.start('StateA');
+//   else if (cursors.down.isDown)
+//     {
+//       katie.body.moveDown(350);
+//     }
+//   if (fireButton.isDown)
+//     {
+//     weapon.fire();
+//     }
+// }
+//
+//
+// function render() {
+//   scoreText.text = 'Score: ' + score;
+//   timerText.text = 'Time Left: ' + game.time.events.duration;
+// }
+//
+//
+// function listener (sprite, pointer) {
+//   console.log(score);
+//   score += 10;
+//   console.log("score is ", score);
+//   sprite.destroy();
+//   // fire ajax PATCH request to game
+//   // how do we get game id?
+//   if (
+//     game.time.events.duration === 0
+//   ) {
+//     gameover();
+//   }
+// }
+//
+//
+//
+//
+// game.state.add('Main', Main);
+// game.state.start('Main');
