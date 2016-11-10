@@ -184,6 +184,7 @@ function create() {
 // GAME OVER
 function gameover () {
   game.destroy();
+  console.log('game destroyed');
 }
 
 
