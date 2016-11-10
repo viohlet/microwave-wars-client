@@ -214,8 +214,7 @@ webpackJsonp([0],[
 	//declare variable app with key api that has a value of our server location
 
 	var app = {
-	  // host: 'https://aqueous-atoll-85096.herokuapp.com',
-	  host: 'http://localhost:4741'
+	  host: 'https://warm-beyond-44482.herokuapp.com/'
 	};
 
 	//exports the variable containing the server location to be used in other files.
