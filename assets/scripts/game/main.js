@@ -88,7 +88,7 @@ function create() {
   katie.smoothed = false;
 
   katie.body.setCollisionGroup(playerCollisionGroup);
-  katie.body.collides(studentCollisionGroup);
+  katie.body.collides(studentCollisionGroup, hitStudent);
 
   game.camera.follow(katie);
 
@@ -117,9 +117,9 @@ function create() {
 
   students.setAll('inputEnabled', true);
   students.setAll('input.useHandCursor', true);
-  students.forEach(function(student) {
-    student.events.onInputDown.add(listener, this);
-  });
+  // students.forEach(function(student) {
+  //   student.events.onInputDown.add(listener, this);
+  // });
 
   let table1 = game.add.sprite (662, 170, 'sprites', 'table.png');
   // table1.BodyDebug.body.collides(playerCollisionGroup, studentCollisionGroup);
@@ -173,13 +173,13 @@ function create() {
 }
 
 
-  // function hitStudent(katie, student) {
-    // student.health = 2;
+  function hitStudent(katie, student) {
+    student.health = 2;
     // for each {student.sprite.alpha -= 0.5};
-    // student.sprite.alpha -= 0.5;
-    // score += 10;
-    // student.destroy();
-  // }
+    student.sprite.alpha -= 1;
+    score += 10;
+    student.destroy();
+  }
 
 // GAME OVER
 function gameover () {
@@ -229,16 +229,16 @@ function render() {
 }
 
 
-function listener (sprite, pointer) {
-  console.log(score);
-  score += 10;
-  console.log("score is ", score);
-  sprite.destroy();
-  // fire ajax PATCH request to game
-  // how do we get game id?
-  if (
-    game.time.events.duration === 0
-  ) {
-    gameover();
-  }
-}
+// function listener (sprite, pointer) {
+//   console.log(score);
+//   score += 10;
+//   console.log("score is ", score);
+//   sprite.destroy();
+//   // fire ajax PATCH request to game
+//   // how do we get game id?
+//   if (
+//     game.time.events.duration === 0
+//   ) {
+//     gameover();
+//   }
+// }
