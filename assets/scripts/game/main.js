@@ -16,6 +16,7 @@ function preload () {
   game.scale.pageAlignVertically = true;
   game.stage.backgroundColor = '#000';
   game.load.image('ground', './assets/scripts/game/images/ground.jpg');
+  game.load.image('star', 'assets/scripts/game/images/star.png');
   game.load.atlasJSONHash(
     'sprites',
     './assets/scripts/game/images/spritesheet-mini.png',
@@ -31,6 +32,7 @@ function preload () {
 
 let katie;
 let students;
+let tables;
 let cursors;
 let score = 0;
 let scoreText;
@@ -47,6 +49,8 @@ function create() {
   let ground = game.add.image(0, 0, 'ground');
   ground.fixedToCamera = true;
 
+  game.add.sprite(0, 0, 'star');
+
   //	Enable p2 physics
 	game.physics.startSystem(Phaser.Physics.P2JS);
 
@@ -58,7 +62,7 @@ function create() {
   // Collission Groups
   let playerCollisionGroup = game.physics.p2.createCollisionGroup();
   let studentCollisionGroup = game.physics.p2.createCollisionGroup();
-  // let lilTableCollisionGroup = game.physics.p2.createCollisionGroup();   //// Trying tables collision
+  let table1CollisionGroup = game.physics.p2.createCollisionGroup();
 
   // Objects with their own collision groups still collide with the world bounds:
   game.physics.p2.updateBoundsCollisionGroup();
@@ -89,6 +93,7 @@ function create() {
 
   katie.body.setCollisionGroup(playerCollisionGroup);
   katie.body.collides(studentCollisionGroup, hitStudent);
+  katie.body.collides(table1CollisionGroup);
 
   game.camera.follow(katie);
 
@@ -112,7 +117,7 @@ function create() {
 
     student.body.fixedRotation = true;
     student.body.setCollisionGroup(studentCollisionGroup);
-    student.body.collides([ studentCollisionGroup, playerCollisionGroup ]);
+    student.body.collides([ studentCollisionGroup, playerCollisionGroup, table1CollisionGroup ]);
   }
 
   students.setAll('inputEnabled', true);
@@ -121,47 +126,105 @@ function create() {
   //   student.events.onInputDown.add(listener, this);
   // });
 
-  let table1 = game.add.sprite (662, 170, 'sprites', 'table.png');
-  // table1.BodyDebug.body.collides(playerCollisionGroup, studentCollisionGroup);
-  // game.physics.p2.enable(table1);
-  let table2 = game.add.sprite (624, 170, 'sprites', 'table.png');
-  let table3 = game.add.sprite (562, 170, 'sprites', 'table.png');
-  let table4 = game.add.sprite (512, 170, 'sprites', 'table.png');
-  let table5 = game.add.sprite (300, 190, 'sprites', 'table.png');
-  let table6 = game.add.sprite (262, 190, 'sprites', 'table.png');
-  let table7 = game.add.sprite (212, 190, 'sprites', 'table.png');
-  let table8 = game.add.sprite (150, 190, 'sprites', 'table.png');
-  let table9 = game.add.sprite (750, 300, 'sprites', 'table.png');
-  let table10 = game.add.sprite (700, 300, 'sprites', 'table.png');
-  let table11 = game.add.sprite (650, 300, 'sprites', 'table.png');
-  let table12 = game.add.sprite (500, 300, 'sprites', 'table.png');
-  let table13 = game.add.sprite (450, 300, 'sprites', 'table.png');
-  let table14 = game.add.sprite (200, 400, 'sprites', 'table.png');
-  let table15 = game.add.sprite (150, 350, 'sprites', 'table.png');
-  let table16 = game.add.sprite (100, 300, 'sprites', 'table.png');
-  let table17 = game.add.sprite (40, 250, 'sprites', 'table.png');
-  let table18 = game.add.sprite (700, 450, 'sprites', 'table.png');
-  let table19 = game.add.sprite (650, 450, 'sprites', 'table.png');
-  let table20 = game.add.sprite (600, 450, 'sprites', 'table.png');
-  let table21 = game.add.sprite (550, 450, 'sprites', 'table.png');
-  let table22 = game.add.sprite (350, 515, 'sprites', 'table.png');
-  let table23 = game.add.sprite (300, 515, 'sprites', 'table.png');
-  let table24 = game.add.sprite (250, 515, 'sprites', 'table.png');
-  let table25 = game.add.sprite (200, 515, 'sprites', 'table.png');
-  let table26 = game.add.sprite (600, 50, 'sprites', 'table.png');
-  let table27 = game.add.sprite (550, 50, 'sprites', 'table.png');
-  let table28 = game.add.sprite (700, 170, 'sprites', 'table.png');
+
+  let tables = game.add.physicsGroup();
+  tables.enableBody = true;
+  tables.physicsBodyType = Phaser.Physics.P2JS;
+  tables.smoothed = false;
+   //
+  for (let i = 0; i < 100; i++)
+  {
+    let table1 = tables.create(662, 170, 'sprites', 'table.png');
+    table1.body.setRectangle(30,30, 0, 0, 0);
+    // table1.body.moves = false;
+    // table1.body.velocity = 2;
+    // table1.body.setCircle(30);
+    // student.health = 2;
+    table1.body.setZeroDamping();
+    // table1.body.static = true;
+
+    // table1.body.fixedRotation = true;
+    table1.body.setCollisionGroup(table1CollisionGroup);
+    table1.body.collides([ studentCollisionGroup, playerCollisionGroup ]);
+}
+  // tables.create(662, 170, 'sprites', 'table.png');
+  // tables.create(632, 170, 'sprites', 'table.png');
+  // tables.create(624, 170, 'sprites', 'table.png');
+  // tables.create(562, 170, 'sprites', 'table.png');
+  // tables.create(512, 170, 'sprites', 'table.png');
+  // tables.create(300, 190, 'sprites', 'table.png');
+  // tables.create(262, 190, 'sprites', 'table.png');
+  // tables.create(212, 190, 'sprites', 'table.png');
+  // tables.create(150, 190, 'sprites', 'table.png');
+  // tables.create(750, 300, 'sprites', 'table.png');
+  // tables.create(700, 300, 'sprites', 'table.png');
+  // tables.create(650, 300, 'sprites', 'table.png');
+  // tables.create(500, 300, 'sprites', 'table.png');
+  // tables.create(450, 300, 'sprites', 'table.png');
+  // tables.create(200, 400, 'sprites', 'table.png');
+  // tables.create(150, 350, 'sprites', 'table.png');
+  // tables.create(100, 300, 'sprites', 'table.png');
+  // tables.create(40, 250, 'sprites', 'table.png');
+  // tables.create(700, 450, 'sprites', 'table.png');
+  // tables.create(650, 450, 'sprites', 'table.png');
+  // tables.create(600, 450, 'sprites', 'table.png');
+  // tables.create(550, 450, 'sprites', 'table.png');
+  // tables.create(350, 515, 'sprites', 'table.png');
+  // tables.create(300, 515, 'sprites', 'table.png');
+  // tables.create(250, 515, 'sprites', 'table.png');
+  // tables.create(200, 515, 'sprites', 'table.png');
+  // tables.create(600, 50, 'sprites', 'table.png');
+  // tables.create(550, 50, 'sprites', 'table.png');
+  // tables.create(700, 170, 'sprites', 'table.png');
+
+    // tables.create(632, 170, ''sprites', 'table.png'');
+    // tables.create(624, 170, ''sprites', 'table.png'');
+    // tables.create(562, 170, ''sprites', 'table.png'');
+    // tables.create(512, 170, ''sprites', 'table.png'');
+    // tables.create(300, 190, ''sprites', 'table.png'');
+    // tables.create(262, 190, ''sprites', 'table.png'');
+    // tables.create(212, 190, ''sprites', 'table.png'');
+    // tables.create(150, 190, ''sprites', 'table.png'');
+    // tables.create(750, 300, ''sprites', 'table.png'');
+    // tables.create(700, 300, ''sprites', 'table.png'');
+    // tables.create(650, 300, ''sprites', 'table.png'');
+    // tables.create(500, 300, ''sprites', 'table.png'');
+    // tables.create(450, 300, ''sprites', 'table.png'');
+    // tables.create(200, 400, ''sprites', 'table.png'');
+    // tables.create(150, 350, ''sprites', 'table.png'');
+    // tables.create(100, 300, ''sprites', 'table.png'');
+    // tables.create(40, 250, ''sprites', 'table.png'');
+    // tables.create(700, 450, ''sprites', 'table.png'');
+    // tables.create(650, 450, ''sprites', 'table.png'');
+    // tables.create(600, 450, ''sprites', 'table.png'');
+    // tables.create(550, 450, ''sprites', 'table.png'');
+    // tables.create(350, 515, ''sprites', 'table.png'');
+    // tables.create(300, 515, ''sprites', 'table.png'');
+    // tables.create(250, 515, ''sprites', 'table.png'');
+    // tables.create(200, 515, ''sprites', 'table.png'');
+    // tables.create(600, 50, ''sprites', 'table.png'');
+    // tables.create(550, 50, ''sprites', 'table.png'');
+    // tables.create(700, 170, ''sprites', 'table.png'');
+
+
+    // game.physics.p2.enable('tables', 'door');
+
+    // tables.setAll('body.immovable', true);
+    // tables.body.static = true;
+
+    // tables.body.setRectangle(30,30, 0, 0, 4);
+    // tables.body.setZeroDamping();
+    // tables.body.fixedRotation = true;
+    //
+    // tables.body.setCollisionGroup(tablesCollisionGroup);
+    // tables.body.collides(studentCollisionGroup, playerCollisionGroup);
+  // }
+
+
+
+
   //door
   let door = game.add.sprite (20, 500, 'sprites', 'door.png');
-
-  game.physics.p2.enable([ table1, table2, table3, table4, table5, table6,
-                           table7, table8, table9, table10, table11, table12,
-                           door, table13, table14, table15, table16, table17,
-                           table18, table19, table20, table21, table22, table23,
-                           table24, table25, table26, table27, table28
-                        ]);
-
-  table1.body.static = true;
 
 
   cursors = game.input.keyboard.createCursorKeys();
@@ -180,6 +243,12 @@ function create() {
     score += 10;
     student.destroy();
   }
+
+  // function hitTable(katie, table1) {
+  //   // student.health = 2;
+  //   // for each {student.sprite.alpha -= 0.5};
+  //   table1.sprite.alpha -= 0;
+  // }
 
 // GAME OVER
 function gameover () {
