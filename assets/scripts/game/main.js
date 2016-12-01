@@ -174,7 +174,7 @@ function create() {
 
 
   function hitStudent(katie, student) {
-    student.health = 2;
+    // student.health = 2;
     // for each {student.sprite.alpha -= 0.5};
     student.sprite.alpha -= 1;
     score += 10;
@@ -226,19 +226,25 @@ function update() {
 function render() {
   scoreText.text = 'Score: ' + score;
   timerText.text = 'Time Left: ' + game.time.events.duration;
+  if (
+    game.time.events.duration === 0
+  ) {
+    gameover();
+  }
 }
 
 
-// function listener (sprite, pointer) {
-//   console.log(score);
-//   score += 10;
-//   console.log("score is ", score);
-//   sprite.destroy();
+// function listener (sprite, pointer, student) {
+//   // console.log(score);
+//   // score += 10;
+//   // console.log("score is ", score);
+//   // sprite.destroy();
 //   // fire ajax PATCH request to game
 //   // how do we get game id?
-//   if (
-//     game.time.events.duration === 0
-//   ) {
-//     gameover();
-//   }
+//   // render();
+//   // if (
+//   //   game.time.events.duration === 0
+//   // ) {
+//   //   gameover();
+//   // }
 // }
