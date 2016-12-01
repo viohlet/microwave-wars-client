@@ -93,7 +93,7 @@ function create() {
 
   katie.body.setCollisionGroup(playerCollisionGroup);
   katie.body.collides(studentCollisionGroup, hitStudent);
-  katie.body.collides(table1CollisionGroup);
+  katie.body.collides(table1CollisionGroup, hitTable);
 
   game.camera.follow(katie);
 
@@ -134,8 +134,8 @@ function create() {
    //
   for (let i = 0; i < 100; i++)
   {
-    let table1 = tables.create(662, 170, 'sprites', 'table.png');
-    table1.body.setRectangle(30,30, 0, 0, 0);
+    let table1 = tables.create(x, y, 'sprites', 'table.png');
+    table1.body.setRectangle(10,10, 0, 0, 0);
     // table1.body.moves = false;
     // table1.body.velocity = 2;
     // table1.body.setCircle(30);
@@ -146,36 +146,8 @@ function create() {
     // table1.body.fixedRotation = true;
     table1.body.setCollisionGroup(table1CollisionGroup);
     table1.body.collides([ studentCollisionGroup, playerCollisionGroup ]);
-}
-  // tables.create(662, 170, 'sprites', 'table.png');
-  // tables.create(632, 170, 'sprites', 'table.png');
-  // tables.create(624, 170, 'sprites', 'table.png');
-  // tables.create(562, 170, 'sprites', 'table.png');
-  // tables.create(512, 170, 'sprites', 'table.png');
-  // tables.create(300, 190, 'sprites', 'table.png');
-  // tables.create(262, 190, 'sprites', 'table.png');
-  // tables.create(212, 190, 'sprites', 'table.png');
-  // tables.create(150, 190, 'sprites', 'table.png');
-  // tables.create(750, 300, 'sprites', 'table.png');
-  // tables.create(700, 300, 'sprites', 'table.png');
-  // tables.create(650, 300, 'sprites', 'table.png');
-  // tables.create(500, 300, 'sprites', 'table.png');
-  // tables.create(450, 300, 'sprites', 'table.png');
-  // tables.create(200, 400, 'sprites', 'table.png');
-  // tables.create(150, 350, 'sprites', 'table.png');
-  // tables.create(100, 300, 'sprites', 'table.png');
-  // tables.create(40, 250, 'sprites', 'table.png');
-  // tables.create(700, 450, 'sprites', 'table.png');
-  // tables.create(650, 450, 'sprites', 'table.png');
-  // tables.create(600, 450, 'sprites', 'table.png');
-  // tables.create(550, 450, 'sprites', 'table.png');
-  // tables.create(350, 515, 'sprites', 'table.png');
-  // tables.create(300, 515, 'sprites', 'table.png');
-  // tables.create(250, 515, 'sprites', 'table.png');
-  // tables.create(200, 515, 'sprites', 'table.png');
-  // tables.create(600, 50, 'sprites', 'table.png');
-  // tables.create(550, 50, 'sprites', 'table.png');
-  // tables.create(700, 170, 'sprites', 'table.png');
+    }
+
 
     // tables.create(632, 170, ''sprites', 'table.png'');
     // tables.create(624, 170, ''sprites', 'table.png'');
@@ -207,22 +179,6 @@ function create() {
     // tables.create(700, 170, ''sprites', 'table.png'');
 
 
-    // game.physics.p2.enable('tables', 'door');
-
-    // tables.setAll('body.immovable', true);
-    // tables.body.static = true;
-
-    // tables.body.setRectangle(30,30, 0, 0, 4);
-    // tables.body.setZeroDamping();
-    // tables.body.fixedRotation = true;
-    //
-    // tables.body.setCollisionGroup(tablesCollisionGroup);
-    // tables.body.collides(studentCollisionGroup, playerCollisionGroup);
-  // }
-
-
-
-
   //door
   let door = game.add.sprite (20, 500, 'sprites', 'door.png');
 
@@ -244,11 +200,11 @@ function create() {
     student.destroy();
   }
 
-  // function hitTable(katie, table1) {
-  //   // student.health = 2;
-  //   // for each {student.sprite.alpha -= 0.5};
-  //   table1.sprite.alpha -= 0;
-  // }
+  function hitTable(katie, table1) {
+    // student.health = 2;
+    // for each {student.sprite.alpha -= 0.5};
+    table1.sprite.alpha -= 0.5;
+  }
 
 // GAME OVER
 function gameover () {
