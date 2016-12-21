@@ -2,7 +2,8 @@
 
 //declare variable app with key api that has a value of our server location
 const app = {
-  host: 'https://warm-beyond-44482.herokuapp.com/',
+  // host: 'https://warm-beyond-44482.herokuapp.com/',
+  host: 'https://warm-beyond-44482.herokuapp.com',
   // host: 'http://localhost:4741',
   // user: {
     //id: ?
