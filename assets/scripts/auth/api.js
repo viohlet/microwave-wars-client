@@ -16,6 +16,7 @@ return $.ajax({
     url: app.host + '/sign-in',
     method: 'POST',
     data,
+    // data: signUpData ? signUpData : data,
   });
 };
 

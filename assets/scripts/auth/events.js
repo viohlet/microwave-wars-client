@@ -14,6 +14,7 @@ const onSignUp = function (event) {
   $('#sign-up').modal('hide');
 };
 
+
 const onSignIn = function (event) {
   let data = getFormFields(this);
   event.preventDefault();
@@ -22,6 +23,7 @@ const onSignIn = function (event) {
       .fail(ui.failure);
   $('#sign-in').modal('hide');
 };
+
 
 const onChangePassword = (event) => {
   event.preventDefault();
