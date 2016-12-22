@@ -23,7 +23,15 @@ body {
   // display: none;
   width: 800px;
   height: 600px;
-  margin: 0 auto;
+  // margin: 0 auto;
+  // text-align: right;
+  position: absolute;
+}
+
+.instructions {
+  // position: absolute;
+  text-align: right;
+  // margin: 0 auto;
 }
 
 #change-password-button{
