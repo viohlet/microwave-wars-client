@@ -45,6 +45,7 @@ let showgame = document.getElementById('showgame');
 let scorediv = document.getElementById('scorediv');
 let scorelabel = document.getElementById('label');
 
+
 function create() {
 
   let ground = game.add.image(0, 0, 'ground');
@@ -70,12 +71,14 @@ function create() {
   let x = game.world.randomX;
   let y = game.world.randomY;
 
+
   //weapon TO-DO
   weapon = game.add.weapon(30, 'sprites', 'chair.png');
   //merpy merp bullets are killed
   weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
   weapon.bulletSpeed = 500;
   weapon.fireRate = 600;
+
 
 
   // main character: Katie
@@ -196,19 +199,8 @@ function create() {
   // sadmicrowave.events.onInputUp.add(function addMicrowave() {
   //       // When the paus button is pressed, we pause the game
   //     // game.paused = true;
-  //     game.add.text(350, 80, 'You Win!', { fontSize: '32px', fill: '#E8C80C' });
   // });
 
-//   function addMicrowave(katie, student) {
-//   sadmicrowave = game.add.button(350, 80, 'sadmicrowave');
-//   sadmicrowave.scale.setTo(0.5, 0.5);
-//   sadmicrowave.inputEnabled = true;
-//   sadmicrowave.events.onInputUp.add(function () {
-//         // When the paus button is pressed, we pause the game
-//       // game.paused = true;
-//       youWin = game.add.text(350, 80, 'You Win!', { fontSize: '32px', fill: '#E8C80C' });
-//   });
-// }
 
   timerText = game.add.text(530, 16, 'Time: ', { fontSize: '32px', fill: '#E8C80C' });
   game.time.events.add(Phaser.Timer.SECOND * 30, fadePicture);
@@ -243,12 +235,6 @@ function create() {
   //                               {font: '24px Arial', fill: '#ffffff'});
   }
 
-  // function microwaveWins() {
-  //     sadmicrowave = game.add.button(350, 80, 'sadmicrowave');
-  //     sadmicrowave.scale.setTo(0.5, 0.5);
-  //     sadmicrowave.inputEnabled = true;
-  //     sadmicrowave.events.onInputUp.add();
-  // }
 
   function update() {
 
@@ -292,24 +278,7 @@ function create() {
     if (
       score === 230
     ){
-      game.add.text(350, 80, 'You Win! Click to restart', { fontSize: '32px', fill: '#E8C80C' });
+      game.add.text(330, 100, 'You Win!', { fontSize: '32px', fill: '#E8C80C' });
       // restart();
     }
   }
-
-
-//     player.resetPosition(); // Reset the players position   score = 0;   // Reset the score to zero   addMoreEnemies();  // Add more enemies to your game}
-// function listener (sprite, pointer, student) {
-//   // console.log(score);
-//   // score += 10;
-//   // console.log("score is ", score);
-//   // sprite.destroy();
-//   // fire ajax PATCH request to game
-//   // how do we get game id?
-//   // render();
-//   // if (
-//   //   game.time.events.duration === 0
-//   // ) {
-//   //   gameover();
-//   // }
-// }

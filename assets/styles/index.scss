@@ -18,6 +18,12 @@ body {
   color: $black;
 }
 
+.welcometext{
+  color: $white;
+  font-family: arial;
+  font-size: 18px;
+}
+
 #showgame {
   display: block;
   // display: none;
@@ -26,12 +32,14 @@ body {
   // margin: 0 auto;
   // text-align: right;
   position: absolute;
+  // position:
 }
 
 .instructions {
   // position: absolute;
   text-align: right;
   // margin: 0 auto;
+  padding-bottom: 370px;
 }
 
 #change-password-button{
