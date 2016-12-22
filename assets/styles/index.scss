@@ -18,11 +18,28 @@ body {
   color: $black;
 }
 
+.welcometext{
+  color: $white;
+  font-family: arial;
+  font-size: 18px;
+}
+
 #showgame {
-  display: none;
+  display: block;
+  // display: none;
   width: 800px;
   height: 600px;
-  margin: 0 auto;
+  // margin: 0 auto;
+  // text-align: right;
+  position: absolute;
+  // position:
+}
+
+.instructions {
+  // position: absolute;
+  text-align: right;
+  // margin: 0 auto;
+  padding-bottom: 370px;
 }
 
 #change-password-button{
