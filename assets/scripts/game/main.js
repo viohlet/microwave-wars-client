@@ -17,6 +17,7 @@ function preload () {
   game.stage.backgroundColor = '#000';
   game.load.image('ground', './assets/scripts/game/images/ground.jpg');
   game.load.image('star', 'assets/scripts/game/images/star.png');
+  game.load.image('sadmicrowave', 'assets/scripts/game/images/sadmicrowave.png');
   game.load.atlasJSONHash(
     'sprites',
     './assets/scripts/game/images/spritesheet-mini.png',
@@ -27,9 +28,9 @@ function preload () {
     './assets/scripts/game/images/students.png',
     './assets/scripts/game/images/students.json'
   );
-  // main.onCreate();
 }
 
+let sadmicrowave;
 let katie;
 let students;
 let tables;
@@ -46,10 +47,21 @@ let scorelabel = document.getElementById('label');
 
 function create() {
 
+  // sadmicrowave = game.add.button(350, 80, 'sadmicrowave');
+  // sadmicrowave.scale.setTo(0.5, 0.5);
+  // sadmicrowave.inputEnabled = true;
+  // sadmicrowave.events.onInputUp.add(function () {
+  //       // When the paus button is pressed, we pause the game
+  //     game.paused = false;
+  // });
+
+  // game.paused = true;
+
+
   let ground = game.add.image(0, 0, 'ground');
   ground.fixedToCamera = true;
 
-  game.add.sprite(0, 0, 'star');
+  // game.add.sprite(0, 0, 'star');
 
   //	Enable p2 physics
 	game.physics.startSystem(Phaser.Physics.P2JS);
@@ -77,6 +89,8 @@ function create() {
   weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
   weapon.bulletSpeed = 500;
   weapon.fireRate = 600;
+
+
 
 
   // main character
@@ -187,9 +201,23 @@ function create() {
 
   scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
-  timerText = game.add.text(560, 16, 'Time: ', { fontSize: '32px', fill: '#000' });
+  sadmicrowave = game.add.button(350, 80, 'sadmicrowave');
+  sadmicrowave.scale.setTo(0.5, 0.5);
+  sadmicrowave.inputEnabled = true;
+  sadmicrowave.events.onInputUp.add(function () {
+        // When the paus button is pressed, we pause the game
+      game.paused = false;
+  });
+
+
+
+
+  timerText = game.add.text(530, 16, 'Time: ', { fontSize: '32px', fill: '#000' });
   game.time.events.add(Phaser.Timer.SECOND * 30, fadePicture);
 }
+
+
+
 
 
   function hitStudent(katie, student) {
@@ -217,9 +245,20 @@ function fadePicture() {
   game.add.tween(katie).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
   game.add.tween(scoreText).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
 
-  let nameLabel = game.add.text(80, 80, 'GAME OVER. Click on a Student to Continue',
-                                {font: '24px Arial', fill: '#ffffff'});
+  // let nameLabel = game.add.text(80, 80, 'GAME OVER. Click on a Student to Continue',
+  //                               {font: '24px Arial', fill: '#ffffff'});
   }
+
+// function merpyMerp () {
+//   if (game.time.events.duration === 27000
+//   ) {
+//     game.paused = true;
+//   }
+// }
+//
+// function resumingGame() {
+//     game.paused = false;
+// }
 
 function update() {
 
